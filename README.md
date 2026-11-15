@@ -59,6 +59,15 @@ uv run --locked uvicorn investagent.main:app --reload
 The API listens on `http://127.0.0.1:8000`; its health endpoint is
 `http://127.0.0.1:8000/api/v1/health`.
 
+### Research API contract
+
+`POST /api/v1/research/analyze` accepts `company_name` (string) and `sources`
+(a list of objects with unique `source_id` and `text` strings). Its planned
+response contains `company_name` and `summary` strings, plus `opportunities`,
+`risks`, and `source_references` (source ID) string lists. The analysis
+service is not implemented yet, so valid requests currently return HTTP 501
+with an explanatory message; the API does not generate placeholder analysis.
+
 Run backend tests and lint checks from `backend/`:
 
 ```shell
