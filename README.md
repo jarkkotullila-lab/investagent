@@ -101,11 +101,50 @@ curl --fail-with-body --silent --show-error \
 The API and Robot tests do not require Ollama; with the provider disabled they
 continue to receive HTTP 501.
 
+### Research evaluation
+
+The versioned `backend/evaluation/datasets/research_v1.json` dataset contains
+synthetic company examples. Deterministic evaluator tests check schema,
+references, and configured keyword presence/absence; keyword matching is only
+a proxy and does not establish semantic groundedness or prove that a model
+cannot hallucinate. Percentage keywords accept equivalent numeric forms such
+as `10 percent`, `10%`, and `10 %`, with numeric boundaries to avoid matching
+different values or percentage points. This normalization checks wording only;
+it does not establish semantic equivalence or factual correctness. The pytest
+suite tests the evaluator itself and does not produce model scores.
+
+Run the deterministic evaluation tests from `backend/`:
+
+```shell
+uv run --locked pytest tests/test_evaluation.py
+```
+
+For a live score, start Ollama manually as described above, set
+`INVESTAGENT_AI_PROVIDER=ollama`, and run this from `backend/`:
+
+```shell
+uv run --locked python -m evaluation.runner
+```
+
+The runner labels scores as live Ollama results and exits nonzero if any
+evaluated case fails. If AI is disabled or Ollama is unavailable, it reports
+that the live evaluation was skipped and produces no score.
+
+To print each evaluated response to the terminal for diagnosis, opt in with:
+
+```shell
+uv run --locked python -m evaluation.runner --show-response
+```
+
+By default, responses are not printed or saved. Use `--show-response` only
+with synthetic, non-sensitive evaluation data; the option prints validated
+analysis responses but does not print prompts or save files.
+
 Run backend tests and lint checks from `backend/`:
 
 ```shell
 uv run --locked pytest
-uv run --locked ruff check src tests
+uv run --locked ruff check src tests evaluation
 ```
 
 ## Frontend development

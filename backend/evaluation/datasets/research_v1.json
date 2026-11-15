@@ -1,0 +1,55 @@
+{
+  "dataset_version": "research_v1",
+  "description": "Synthetic-only company research cases for deterministic evaluation checks.",
+  "cases": [
+    {
+      "case_id": "synthetic-cedar-works",
+      "company_name": "Example Cedar Works",
+      "sources": [
+        {
+          "source_id": "cedar-plan",
+          "text": "Synthetic source: Example Cedar Works plans to open a second plant in 2027."
+        },
+        {
+          "source_id": "cedar-cost",
+          "text": "Synthetic source: Unit manufacturing costs fell by 10 percent in the fictional test period."
+        }
+      ],
+      "required_facts_or_keywords": [
+        "second plant",
+        "2027",
+        "10 percent"
+      ],
+      "forbidden_claims_or_keywords": [
+        "revenue doubled",
+        "acquired a competitor"
+      ],
+      "expected_source_ids": [
+        "cedar-plan",
+        "cedar-cost"
+      ]
+    },
+    {
+      "case_id": "synthetic-harbor-tools",
+      "company_name": "Example Harbor Tools",
+      "sources": [
+        {
+          "source_id": "harbor-update",
+          "text": "Synthetic source: Example Harbor Tools plans recyclable packaging. Warranty claims rose by 4 percent in the fictional period."
+        }
+      ],
+      "required_facts_or_keywords": [
+        "recyclable packaging",
+        "warranty claims",
+        "4 percent"
+      ],
+      "forbidden_claims_or_keywords": [
+        "record profits",
+        "debt-free"
+      ],
+      "expected_source_ids": [
+        "harbor-update"
+      ]
+    }
+  ]
+}
