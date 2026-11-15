@@ -1,0 +1,63 @@
+name: Backend
+
+on:
+  push:
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  backend:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Set up uv
+        uses: astral-sh/setup-uv@v6
+        with:
+          enable-cache: true
+          cache-dependency-glob: backend/uv.lock
+
+      - name: Install backend dependencies
+        run: uv sync --locked --project backend
+
+      - name: Run Ruff
+        run: uv run --locked ruff check src tests
+        working-directory: backend
+
+      - name: Run Pytest
+        run: uv run --locked pytest
+        working-directory: backend
+
+      - name: Run Robot Framework API tests
+        run: |
+          uv run --locked --project backend uvicorn investagent.main:app \
+            --host 127.0.0.1 --port 8000 > "$RUNNER_TEMP/investagent-api.log" 2>&1 &
+          if ! curl --fail --silent --show-error --retry 30 --retry-connrefused \
+            --retry-delay 1 --max-time 2 http://127.0.0.1:8000/api/v1/health \
+            > /dev/null; then
+            cat "$RUNNER_TEMP/investagent-api.log"
+            exit 1
+          fi
+          uv run --no-project --python 3.12 \
+            --with-requirements tests/robot/requirements.txt robot \
+            --variable API_BASE_URL:http://127.0.0.1:8000 \
+            tests/robot/suites/api/health.robot
+
+      - name: Upload Robot Framework reports
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: robot-framework-reports
+          path: |
+            output.xml
+            log.html
+            report.html
+          if-no-files-found: warn
