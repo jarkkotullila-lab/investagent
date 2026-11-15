@@ -38,8 +38,9 @@ The backend is an installable FastAPI package with `GET /api/v1/health`,
 Pytest coverage, Ruff checks, and Robot Framework API acceptance tests. The
 React dashboard displays the local backend connection status and supports
 English and Finnish. Database access, AI integrations, authentication, and
-investment analysis are not implemented. No Docker setup or cloud
-infrastructure is required.
+investment analysis are not implemented. An injectable AI provider interface
+and research service foundation exist, but no production provider is
+configured. No Docker setup or cloud infrastructure is required.
 
 ## Backend development
 
@@ -65,8 +66,10 @@ The API listens on `http://127.0.0.1:8000`; its health endpoint is
 (a list of objects with unique `source_id` and `text` strings). Its planned
 response contains `company_name` and `summary` strings, plus `opportunities`,
 `risks`, and `source_references` (source ID) string lists. The analysis
-service is not implemented yet, so valid requests currently return HTTP 501
-with an explanatory message; the API does not generate placeholder analysis.
+endpoint remains HTTP 501 until a production provider is integrated; it does
+not generate placeholder analysis. Prompt instructions are not a guarantee
+against prompt injection; returned data is structurally validated and source
+references are checked against the request.
 
 Run backend tests and lint checks from `backend/`:
 
