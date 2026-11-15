@@ -37,10 +37,9 @@ decision and local-data/cloud-privacy conventions.
 The backend is an installable FastAPI package with `GET /api/v1/health`,
 Pytest coverage, Ruff checks, and Robot Framework API acceptance tests. The
 React dashboard displays the local backend connection status and supports
-English and Finnish. Database access, AI integrations, authentication, and
-investment analysis are not implemented. An injectable AI provider interface
-and research service foundation exist, but no production provider is
-configured. No Docker setup or cloud infrastructure is required.
+English and Finnish. Local Ollama research is opt-in and disabled by default.
+Database access, authentication, and cloud AI integrations are not
+implemented. No Docker setup or cloud infrastructure is required.
 
 ## Backend development
 
@@ -65,11 +64,42 @@ The API listens on `http://127.0.0.1:8000`; its health endpoint is
 `POST /api/v1/research/analyze` accepts `company_name` (string) and `sources`
 (a list of objects with unique `source_id` and `text` strings). Its planned
 response contains `company_name` and `summary` strings, plus `opportunities`,
-`risks`, and `source_references` (source ID) string lists. The analysis
-endpoint remains HTTP 501 until a production provider is integrated; it does
-not generate placeholder analysis. Prompt instructions are not a guarantee
-against prompt injection; returned data is structurally validated and source
-references are checked against the request.
+`risks`, and `source_references` (source ID) string lists. With AI disabled
+(the default), the endpoint returns HTTP 501. When explicitly enabled, it
+uses only the configured local Ollama provider; it does not generate
+placeholder analysis. Prompt instructions are not a guarantee against prompt
+injection; returned data is structurally validated and source references are
+checked against the request.
+
+### Optional local Ollama smoke test
+
+Install Ollama and download a model yourself; InvestAgent will not install,
+download, or start it. For example, run `ollama pull qwen2.5:3b` manually,
+then start the local Ollama server with `ollama serve`.
+
+In another terminal, from `backend/`, enable the provider and start the API:
+
+```shell
+export INVESTAGENT_AI_PROVIDER=ollama
+# Optional overrides (timeout is in seconds; the default is 120).
+export INVESTAGENT_OLLAMA_BASE_URL=http://127.0.0.1:11434
+export INVESTAGENT_OLLAMA_MODEL=qwen2.5:3b
+export INVESTAGENT_OLLAMA_TIMEOUT=120
+uv run --locked uvicorn investagent.main:app --reload
+```
+
+The base URL must use `localhost` or a loopback IP; remote/cloud endpoints are
+rejected. From a separate terminal, submit synthetic input:
+
+```shell
+curl --fail-with-body --silent --show-error \
+  -X POST http://127.0.0.1:8000/api/v1/research/analyze \
+  -H 'Content-Type: application/json' \
+  --data '{"company_name":"Example Corporation","sources":[{"source_id":"smoke-1","text":"Synthetic source content for API smoke testing."}]}'
+```
+
+The API and Robot tests do not require Ollama; with the provider disabled they
+continue to receive HTTP 501.
 
 Run backend tests and lint checks from `backend/`:
 

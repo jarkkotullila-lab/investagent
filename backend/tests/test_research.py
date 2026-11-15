@@ -68,7 +68,10 @@ def test_research_response_model_matches_contract() -> None:
     }
 
 
-def test_research_analyze_returns_501_until_service_exists() -> None:
+def test_research_analyze_returns_501_when_ai_is_disabled(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    monkeypatch.setenv("INVESTAGENT_AI_PROVIDER", "disabled")
     response = _post_research(VALID_REQUEST)
 
     assert response.status_code == 501
