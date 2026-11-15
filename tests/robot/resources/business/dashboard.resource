@@ -21,6 +21,20 @@ Switch Dashboard Language To English
     Dashboard Document Language Should Be    en
     Dashboard Backend Status Should Be    online    Backend is online
 
+Submit Synthetic Research And Verify Analysis
+    Mock Research API Response
+    Fill Research Form
+    ...    Example Technologies
+    ...    annual-report
+    ...    Synthetic research information for acceptance testing.
+    Submit Research Form
+    Research Analysis Should Match
+    ...    Example Technologies
+    ...    Synthetic analysis based on the submitted research.
+    ...    Synthetic opportunity.
+    ...    Synthetic risk.
+    ...    annual-report
+
 Simulate An Unavailable Backend
     Make Dashboard Health Endpoint Unavailable
     Retry Dashboard Backend Connection

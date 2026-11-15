@@ -19,5 +19,31 @@
       "online": "Backend is online",
       "offline": "Backend is offline"
     }
+  },
+  "research": {
+    "title": "Research analysis",
+    "description": "Submit synthetic company research to request a structured analysis.",
+    "companyName": "Company name",
+    "sourceId": "Source ID",
+    "sourceText": "Source text",
+    "analyze": "Analyze research",
+    "analyzing": "Analyzing...",
+    "status": {
+      "idle": "Ready for research input.",
+      "loading": "Analysis is in progress.",
+      "success": "Research analysis complete.",
+      "validation-error": "Enter a company name, source ID, and source text.",
+      "backend-unavailable": "The research service or local AI provider is unavailable. Check the local backend and AI provider.",
+      "provider-disabled": "The AI provider is disabled. Enable the local Ollama provider to analyze research.",
+      "api-error": "The research request failed. Please try again."
+    },
+    "result": {
+      "title": "Analysis result",
+      "companyName": "Company",
+      "summary": "Summary",
+      "opportunities": "Opportunities",
+      "risks": "Risks",
+      "sourceReferences": "Source references"
+    }
   }
 }

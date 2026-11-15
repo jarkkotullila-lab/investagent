@@ -24,3 +24,7 @@ Dashboard Supports English And Finnish
     Dashboard Should Report The Backend Online
     Switch Dashboard Language To Finnish
     Switch Dashboard Language To English
+
+Users Can Submit Research And View Its Analysis
+    [Tags]    smoke    ui
+    Submit Synthetic Research And Verify Analysis

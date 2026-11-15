@@ -19,5 +19,31 @@
       "online": "Taustapalvelu on käytettävissä",
       "offline": "Taustapalvelu ei ole käytettävissä"
     }
+  },
+  "research": {
+    "title": "Tutkimuksen analysointi",
+    "description": "Lähetä synteettistä yritystietoa jäsenneltyä analyysiä varten.",
+    "companyName": "Yrityksen nimi",
+    "sourceId": "Lähteen tunniste",
+    "sourceText": "Lähteen teksti",
+    "analyze": "Analysoi tutkimus",
+    "analyzing": "Analysoidaan...",
+    "status": {
+      "idle": "Valmis vastaanottamaan tutkimustietoja.",
+      "loading": "Analyysi on käynnissä.",
+      "success": "Tutkimusanalyysi on valmis.",
+      "validation-error": "Anna yrityksen nimi, lähteen tunniste ja lähteen teksti.",
+      "backend-unavailable": "Tutkimuspalvelu tai paikallinen tekoälypalvelu ei ole käytettävissä. Tarkista taustapalvelu ja tekoälypalvelu.",
+      "provider-disabled": "Tekoälypalvelu ei ole käytössä. Ota paikallinen Ollama-palvelu käyttöön tutkimuksen analysointia varten.",
+      "api-error": "Tutkimuspyyntö epäonnistui. Yritä uudelleen."
+    },
+    "result": {
+      "title": "Analyysin tulos",
+      "companyName": "Yritys",
+      "summary": "Yhteenveto",
+      "opportunities": "Mahdollisuudet",
+      "risks": "Riskit",
+      "sourceReferences": "Lähdeviitteet"
+    }
   }
 }
