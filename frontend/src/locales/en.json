@@ -1,0 +1,23 @@
+{
+  "appName": "InvestAgent",
+  "language": {
+    "label": "Language",
+    "english": "English",
+    "finnish": "Suomi"
+  },
+  "dashboard": {
+    "eyebrow": "Local-first investment research",
+    "title": "Your research workspace",
+    "description": "A private workspace for exploring investment research, built to keep your data under your control."
+  },
+  "backend": {
+    "title": "Backend connection",
+    "description": "Connection to the local InvestAgent API.",
+    "retry": "Check connection",
+    "status": {
+      "loading": "Checking connection",
+      "online": "Backend is online",
+      "offline": "Backend is offline"
+    }
+  }
+}

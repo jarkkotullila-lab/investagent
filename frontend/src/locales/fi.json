@@ -1,0 +1,23 @@
+{
+  "appName": "InvestAgent",
+  "language": {
+    "label": "Kieli",
+    "english": "English",
+    "finnish": "Suomi"
+  },
+  "dashboard": {
+    "eyebrow": "Paikallinen sijoitustutkimus",
+    "title": "Tutkimustyötilasi",
+    "description": "Yksityinen työtila sijoitustutkimukseen. Sovellus on suunniteltu pitämään tietosi omassa hallinnassasi."
+  },
+  "backend": {
+    "title": "Taustapalvelun yhteys",
+    "description": "Yhteys paikalliseen InvestAgent-rajapintaan.",
+    "retry": "Tarkista yhteys",
+    "status": {
+      "loading": "Tarkistetaan yhteyttä",
+      "online": "Taustapalvelu on käytettävissä",
+      "offline": "Taustapalvelu ei ole käytettävissä"
+    }
+  }
+}

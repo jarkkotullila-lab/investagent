@@ -35,9 +35,11 @@ decision and local-data/cloud-privacy conventions.
 ## Current implementation status
 
 The backend is an installable FastAPI package with `GET /api/v1/health`,
-Pytest coverage, Ruff checks, and a Robot Framework API acceptance test.
-Database access, AI integrations, authentication, and frontend functionality
-are not implemented. No Docker setup or cloud infrastructure is required.
+Pytest coverage, Ruff checks, and Robot Framework API acceptance tests. The
+React dashboard displays the local backend connection status and supports
+English and Finnish. Database access, AI integrations, authentication, and
+investment analysis are not implemented. No Docker setup or cloud
+infrastructure is required.
 
 ## Backend development
 
@@ -64,6 +66,37 @@ uv run --locked pytest
 uv run --locked ruff check src tests
 ```
 
+## Frontend development
+
+Install the locked frontend dependencies from `frontend/`:
+
+```shell
+npm ci
+```
+
+In one terminal, start the backend using the instructions above. In another
+terminal, start the Vite development server from `frontend/`:
+
+```shell
+npm run dev
+```
+
+Open `http://127.0.0.1:5173`. Vite forwards `/api` requests to the local
+backend at `http://127.0.0.1:8000`. The dashboard remains available if the
+backend is stopped and reports the connection as offline.
+
+Run frontend checks from `frontend/`:
+
+```shell
+npm run test:run
+npm run lint
+npm run typecheck
+npm run build
+```
+
+Component tests mock network requests and do not require a running backend.
+The development server requires the backend only to report its live status.
+
 ## Robot Framework API acceptance test
 
 Start the API in a separate terminal first. From the repository root, run:
@@ -79,18 +112,49 @@ uv run --no-project --python 3.12 \
 Robot's `--variable` option. Robot Framework writes `output.xml`, `log.html`,
 and `report.html` in the current directory.
 
+## Robot Framework UI acceptance tests
+
+The UI suite requires both the backend and frontend development server. From
+the repository root on macOS or Linux, install the Robot dependencies and
+Chromium once:
+
+```shell
+uv venv tests/robot/.venv --python 3.12
+uv pip install --python tests/robot/.venv/bin/python \
+  -r tests/robot/requirements.txt \
+  -r tests/robot/requirements-ui.txt
+tests/robot/.venv/bin/rfbrowser init chromium
+```
+
+The Robot requirements files pin direct dependencies and are shared by local
+setup and CI. Transitive Python dependencies are not lockfile-pinned and can
+vary within their upstream constraints; Browser Library's Node wrapper uses
+the lockfile shipped with its pinned package.
+
+With the backend and frontend running in separate terminals, run the suite:
+
+```shell
+tests/robot/.venv/bin/robot \
+  --outputdir test-results/ui \
+  --variable FRONTEND_BASE_URL:http://127.0.0.1:5173 \
+  tests/robot/suites/ui
+```
+
+`FRONTEND_BASE_URL` defaults to `http://127.0.0.1:5173`. UI tests use isolated
+browser contexts and mock the health endpoint as unavailable for the offline
+scenario.
+
 ## Planned development phases
 
-1. **Local application skeleton:** add the React/TypeScript frontend and
-   establish focused backend and frontend checks.
-2. **Local research workflow:** implement a useful end-to-end research flow
+1. **Local research workflow:** implement a useful end-to-end research flow
    using local data and Ollama, with versioned prompts and deterministic AI
    tests.
-3. **Acceptance testing and usability:** extend Robot Framework tests using
-   business, page, and API resources; add translated UI resources as
-   user-facing screens are introduced.
-4. **Reassess future needs:** consider PostgreSQL or other deferred features
-   only when actual requirements justify them.
+2. **Data management:** add local SQLite persistence and migrations, keeping
+   database access compatible with a future PostgreSQL migration.
+3. **Acceptance testing and usability:** extend the layered Robot Framework
+   suites as workflows are introduced and continue improving translated UI.
+4. **Reassess future needs:** consider cloud providers, authentication, or
+   commercial features only when actual requirements justify them.
 
 The Robot Framework layers are a design convention, not a reason to create
 unused resource abstractions before there are workflows to test.
